@@ -1,0 +1,5 @@
+﻿  C-Ex2.c
+c:\users\andrey\documents\visual studio 2015\projects\c-ex2\c-ex2\c-ex2.c(14): warning C4013: 'malloc' undefined; assuming extern returning int
+c:\users\andrey\documents\visual studio 2015\projects\c-ex2\c-ex2\c-ex2.c(106): warning C4013: 'free' undefined; assuming extern returning int
+c:\users\andrey\documents\visual studio 2015\projects\c-ex2\c-ex2\c-ex2.c(33): warning C4715: 'GetTail': not all control paths return a value
+  C-Ex2.vcxproj -> C:\Users\Andrey\documents\visual studio 2015\Projects\C-Ex2\Debug\C-Ex2.exe
