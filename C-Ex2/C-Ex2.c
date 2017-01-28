@@ -16,109 +16,82 @@ struct Queue* ConstructorQueue()
 	return queue;
 }
 
-Node* GetTail(Node *node)
-{
-	if (node != NULL)
-	{
-		if (node->next == NULL)
-		{
-			return node;
-		}
-		GetTail(node->next);
-	}
-	else
-	{
-		return NULL;
-	}
-}
-
 void Push(Queue *queue, int value)
 {
-	if (queue->head == NULL)
+	Node* node = (Node*)malloc(sizeof(Node));
+	node->value = value;
+	node->next = NULL;
+	Node *tail = queue->head;
+	if (tail != NULL)
 	{
-		Node* node = (Node*)malloc(sizeof(Node));
-		node->value = value;
-		node->next = NULL;
+		while (tail->next != NULL)
+			tail = tail->next;
+	}
+
+	if (tail == NULL)
 		queue->head = node;
-	}
 	else
-	{
-		Node* tail = GetTail(queue->head);
-		Node* node = (Node*)malloc(sizeof(Node));
-		node->value = value;
-		node->next = NULL;
 		tail->next = node;
-	}
 }
 
 int Top(Queue *queue)
 {
 	if (queue->head != NULL)
-	{
 		return queue->head->value;
-	}
-	return 0;
+
+	return -1;
 }
+
 
 int Pop(Queue *queue)
 {
-	if (queue->head != NULL)
-	{
-		if (queue->head->next != NULL)
-		{
-			int num = queue->head->value;
-			queue->head = queue->head->next;
-			return num;
-		}
-		else
-		{
-			int num = queue->head->value;
-			queue->head = NULL;
-			return num;
-		}
-	}
-	return 0;
-}
+	if (queue->head == NULL)
+		return -1; //!!! Exception?
 
-int LenghtFromNode(Node *currentNode);
+	Node *item = queue->head;
+	queue->head = queue->head->next;
+	int num = item->value;
+	free(item);
+	return num;
+
+}
 
 int Lenght(Queue *queue)
 {
-	return LenghtFromNode(queue->head);
-}
-
-int LenghtFromNode(Node *currentNode)
-{
-	if (currentNode != NULL)
+	int counter = 0;
+	if (queue->head != NULL)
 	{
-		return 1 + LenghtFromNode(currentNode->next);
-	}
-	return 0;
-}
-
-void DestructorNode(Node *currentNode);
-
-void DestructorQeueu(Queue *queue)
-{
-	if (queue != NULL)
-	{
-		DestructorNode(queue->head);
-		free(queue);
-	}
-}
-
-void DestructorNode(Node *currentNode)
-{
-	if (currentNode != NULL)
-	{
-		if (currentNode->next != NULL)
+		++counter;
+		Node *item = queue->head;
+		while (item->next != NULL)
 		{
-			DestructorNode(currentNode->next);
+			item = item->next;
+			++counter;
 		}
-		free(currentNode);
 	}
+	return counter;
 }
 
+void QueueDestructor(Queue* queue)
+{
+	Node* ptr = queue->head;
+	if (ptr == NULL)
+	{
+		free(ptr);
+	}
+	else
+	{
+		Node* item = ptr;
+		while (ptr->next)
+		{
+			item = ptr;
+			ptr = ptr->next;
+			free(item);
+		}
+		free(ptr);
+	}
+	free(queue);
+}
 
 int main()
 {
@@ -126,8 +99,12 @@ int main()
 	Push(qu, 5);
 	Push(qu, 10);
 	Push(qu, 20);
+	printf("%d\n", Lenght(qu));
 	printf("%d\n", Pop(qu));
-	printf("%d\n", Top(qu));
-	DestructorQeueu(qu);
+	printf("%d\n", Pop(qu));
+	printf("%d\n", Pop(qu));
+	QueueDestructor(qu);
+
+	//DestructorQeueu(qu);
 	return 0;
 }
